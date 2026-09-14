@@ -1,0 +1,32 @@
+# =========================================================
+# Constant-Scaled Model (Variables scaled by 10,000)
+# x = B/10k, y = Mp/10k, z = Mr/10k
+# k = K/10k (Bifurcation parameter)
+# =========================================================
+
+# Initial Conditions (Scaled baseline: 38000, 10000, 5000)
+init x=3.8, y=1.0, z=0.5
+
+# ODEs (Constants alpha, A, and gamma are pre-multiplied by 10k scaling)
+dx/dt = 0.15 * x * (x - 0.1) * (k - x) - (true_beta * 10000) * x * y - eta*u2*x
+dy/dt = nu * sigma * z - 0.02 * x * y - delta * y
+dz/dt = -sigma * z + 0.02 * x * y -u2*z
+
+# Free Parameters for AUTO Continuation
+par u2 = 0
+par k=5.0
+par true_beta=5e-5
+
+# Fixed Biological Rates
+par nu=1.5
+par sigma=0.077
+par delta=0.035
+par eta = 0.05
+
+# XPPAUT Options
+@ total=800, dt=1, bounds=100
+@ autoxmin=0, autoxmax=6, autoymin=0, autoymax=5
+@ autoaxes=1, autovar=x
+@ xlo=0, xhi=6, ylo=0, yhi=5
+
+done
